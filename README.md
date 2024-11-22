@@ -1,2 +1,2 @@
-# -idat-hackathon-kuray-web
+#idat-hackathon-kuray-web
 Kuray Web
