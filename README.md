@@ -10,8 +10,10 @@
 
 ## Consideraciones del proyecto
 Las tres aplicaciones se encuentran en sus folders respectivos. 
-El backend de la aplicación y la obtención de datos se encuentran documentados en 
+El backend de la aplicación y la obtención de datos se encuentran documentados en
+
 ```https://github.com/4xeverburga/idat-hackathon-data```
+
 ```https://github.com/4xeverburga/idat-hackathon-kuray-back```
 
 
