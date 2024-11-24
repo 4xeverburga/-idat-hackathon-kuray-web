@@ -1,0 +1,16 @@
+
+@import 'leaflet/dist/leaflet.css';
+.map-container {
+    height: 500px; /* O el tamaño deseado */
+    width: 100%;
+    border: 1px solid #ccc; /* Opcional, para visualizar el área del mapa */
+}
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: Arial, sans-serif;
+}

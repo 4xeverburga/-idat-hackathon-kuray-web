@@ -3,8 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import ViewSelector from '../components/ViewSelector'; // Importación por defecto
 import ClimateMap from '../components/ClimateMap'; // Importación por defecto
-import PestsMap from '../components/PestsMap'; // Importación por defecto
-import InsightsMap from '../components/InsightsMap'; // Importación por defecto
 import axios from 'axios';
 
 type ClimateData = {
@@ -15,22 +13,9 @@ type ClimateData = {
   recommendation: string;
 };
 
-type PestsData = {
-  lat: number;
-  lon: number;
-  pest: string;
-  description: string;
-  date: string;
-};
-
-type InsightsData = {
-  country: string;
-  headline: string;
-};
-
 const Home = () => {
-  const [view, setView] = useState('pests');
-  const [data, setData] = useState<ClimateData[] | PestsData[] | InsightsData[]>([]);
+  const [view, setView] = useState('climate');
+  const [data, setData] = useState<ClimateData[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,25 +25,7 @@ const Home = () => {
       // setData(res.data);
 
       // Datos ficticios para Perú
-      if (view === 'pests') {
-        try {
-            // Cargar el archivo JSON de plagas
-            const response = await axios.get('/pests.json');
-            const pestsData = response.data.pests
-                .filter((pest: any) => pest.lat !== undefined && pest.lon !== undefined) // Filtrar coordenadas inválidas
-                .map((pest: any) => ({
-                    lat: pest.lat,
-                    lon: pest.lon, // Convertir 'lon' a 'lng'
-                    pest: pest.pest,
-                    description: pest.description,
-                    date: pest.date,
-                }));
-            setData(pestsData);
-        } catch (error) {
-            console.error('Error cargando pests.json:', error);
-        }
-    }
-      else if (view === 'climate') {
+      if (view === 'climate') {
         const climateData: ClimateData[] = [
           {
             lat: -12.0464,
@@ -77,18 +44,6 @@ const Home = () => {
         ];
         setData(climateData);
       }
-      else if (view === 'insights') {
-        setData([
-          {
-            country: 'Perú',
-            headline: 'Aumento en la exportación de palta hacia Europa',
-          },
-          {
-            country: 'Perú',
-            headline: 'Sequia en zonas del norte afecta la producción de arroz',
-          },
-        ]);
-      }
     };
     fetchData();
   }, [view]);
@@ -97,8 +52,6 @@ const Home = () => {
     <div>
       <ViewSelector setView={setView} />
       {view === 'climate' && <ClimateMap data={data} />}
-      {view === 'pests' && <PestsMap data={data} />}
-      {view === 'insights' && <InsightsMap data={data} />}
     </div>
   );
 };

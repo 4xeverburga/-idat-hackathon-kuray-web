@@ -5,55 +5,59 @@ import ViewSelector from '../components/ViewSelector'; // Importación por defec
 import PestsMap from '../components/PestsMap'; // Importación por defecto
 import axios from 'axios';
 
-
 type PestsData = {
   lat: number;
   lon: number;
   pest: string;
   description: string;
   date: string;
+  region:string;
 };
-
-
 
 const Home = () => {
   const [view, setView] = useState('pests');
   const [data, setData] = useState<PestsData[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      // Comentamos la llamada real a la API
-      // const endpoint = `/api/${view}`;
-      // const res = await axios.get(endpoint);
-      // setData(res.data);
-
-      // Datos ficticios para Perú
-      if (view === 'pests') {
-        try {
-            // Cargar el archivo JSON de plagas
-            const response = await axios.get('pests.json');
-            const pestsData = response.data.pests
-                .filter((pest: any) => pest.lat !== undefined && pest.lon !== undefined) // Filtrar coordenadas inválidas
-                .map((pest: any) => ({
-                    lat: pest.lat,
-                    lon: pest.lon, // Convertir 'lon' a 'lng'
-                    pest: pest.pest,
-                    description: pest.description,
-                    date: pest.date,
-                }));
-            setData(pestsData);
-        } catch (error) {
-            console.error('Error cargando pests.json:', error);
+      try {
+        const endpoint = `https://wapp5fewnmgakrn5yzo2u5nsdm0auxzy.lambda-url.us-east-1.on.aws/`;
+        const res = await axios.get(endpoint);
+        console.log('Respuesta de la API:', res);
+        // Validar la estructura de la respuesta
+        if (res.data && Array.isArray(res.data.pests)) {
+          const pestsData = res.data.pests
+            .filter((pest: any) => pest.lat !== undefined && pest.lon !== undefined) // Filtrar datos inválidos
+            .map((pest: any) => ({
+              lat: pest.lat,
+              lon: pest.lon,
+              pest: pest.pest,
+              description: pest.description,
+              date: pest.date,
+              region: pest.region
+            }));
+          setData(pestsData); // Guardar los datos procesados
+        } else {
+          throw new Error('La respuesta de la API no tiene la estructura esperada.');
         }
-    }
+      } catch (err) {
+        console.error('Error al cargar los datos:', err);
+        setError('No se pudieron cargar los datos de la API. Por favor, inténtalo más tarde.');
+      }
     };
+
     fetchData();
-  }, [view]);
+  }, []);
 
   return (
     <div>
       <ViewSelector setView={setView} />
-      {view === 'pests' && <PestsMap data={data} />}
+      {error ? (
+        <p style={{ color: 'red' }}>{error}</p>
+      ) : (
+        view === 'pests' && <PestsMap data={data} />
+      )}
     </div>
   );
 };

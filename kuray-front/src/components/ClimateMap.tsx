@@ -15,6 +15,7 @@ L.Marker.prototype.options.icon = defaultIcon;
 
 import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { LatLngBounds } from 'leaflet';
 
 const SetView = ({ center, zoom }: { center: [number, number]; zoom: number }) => {
     const map = useMap();
@@ -28,7 +29,7 @@ const ClimateMap = ({ data }: { data: any[] }) => {
     return (
         <MapContainer
             style={{ height: '500px', width: '100%' }} // Dimensiones del mapa
-            className="map-container"
+            className="map-climate"
         >
             {/* Configuración de la vista inicial */}
             <SetView center={[0, 0]} zoom={2} />
@@ -38,7 +39,7 @@ const ClimateMap = ({ data }: { data: any[] }) => {
 
             {/* Iterar sobre los datos para renderizar marcadores */}
             {data.map((point, index) => (
-                <Marker key={index} position={[point.lat, point.lng]}>
+                <Marker key={index} position={[point.lat, point.lon]}>
                     <Popup>
                         <strong>{point.zone}</strong>
                         <p>{point.description}</p>

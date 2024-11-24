@@ -7,7 +7,7 @@ const ViewSelector = ({ setView }: { setView: (view: string) => void }) => {
         <select
             id="viewSelector"
             onChange={(e) => setView(e.target.value)}
-            defaultValue="climate"
+            defaultValue="pests"
         >
             <option value="climate">Clima y recomendaciones</option>
             <option value="pests">Plagas</option>

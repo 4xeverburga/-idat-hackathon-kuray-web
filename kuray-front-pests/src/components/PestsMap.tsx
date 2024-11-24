@@ -13,31 +13,26 @@ const defaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = defaultIcon;
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import { LatLngBounds } from 'leaflet';
 
-const SetViewOnClick = ({ coords }: { coords: [number, number] }) => {
+const SetView = ({ center, zoom }: { center: [number, number]; zoom: number }) => {
     const map = useMap();
-    map.setView(coords, map.getZoom());
+    useEffect(() => {
+        map.setView(center, zoom);
+    }, [map, center, zoom]);
     return null;
 };
 
 const PestsMap = ({ data }: { data: any[] }) => {
-    if (!data || data.length === 0) {
-        return <p>No hay datos de plagas disponibles.</p>;
-    }
-    // Calcular los límites del mapa basados en las coordenadas de los datos
-    const bounds = new LatLngBounds(data.map((point) => [point.lat, point.lon]));
-
     return (
         <MapContainer
-            bounds={bounds}
             style={{ height: '500px', width: '100%' }} // Dimensiones del mapa
-            className="map-container"
+            className="map-pests"
         >
             {/* Configuración inicial de la vista */}
-            <SetViewOnClick coords={[0, 0]} />
+            <SetView center={[0, 0]} zoom={2} />
             
             {/* Capa base del mapa */}
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
