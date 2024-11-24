@@ -8,9 +8,8 @@
 ## **Objetivo del Proyecto**
 El objetivo principal de KURAY es proporcionar una plataforma visual y accesible para:
 1. Monitorear la aparición de plagas agrícolas en diferentes regiones.
-2. Filtrar los reportes según región, fecha y tipo de plaga.
-3. Obtener recomendaciones personalizadas utilizando IA (API de ChatGPT).
-4. Facilitar la toma de decisiones basadas en datos visuales y procesados en tiempo real.
+2. Obtener recomendaciones de cultivo personalizadas utilizando IA.
+3. Filtrar noticias relevantes para la planificación agrícola y el comercio internacional.
 
 ---
 
