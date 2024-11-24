@@ -2,18 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import ViewSelector from '../components/ViewSelector'; // Importación por defecto
-import ClimateMap from '../components/ClimateMap'; // Importación por defecto
 import PestsMap from '../components/PestsMap'; // Importación por defecto
-import InsightsMap from '../components/InsightsMap'; // Importación por defecto
 import axios from 'axios';
 
-type ClimateData = {
-  lat: number;
-  lon: number;
-  zone: string;
-  description: string;
-  recommendation: string;
-};
 
 type PestsData = {
   lat: number;
@@ -23,14 +14,11 @@ type PestsData = {
   date: string;
 };
 
-type InsightsData = {
-  country: string;
-  headline: string;
-};
+
 
 const Home = () => {
   const [view, setView] = useState('pests');
-  const [data, setData] = useState<ClimateData[] | PestsData[] | InsightsData[]>([]);
+  const [data, setData] = useState<PestsData[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,7 +31,7 @@ const Home = () => {
       if (view === 'pests') {
         try {
             // Cargar el archivo JSON de plagas
-            const response = await axios.get('/pests.json');
+            const response = await axios.get('pests.json');
             const pestsData = response.data.pests
                 .filter((pest: any) => pest.lat !== undefined && pest.lon !== undefined) // Filtrar coordenadas inválidas
                 .map((pest: any) => ({
@@ -58,37 +46,6 @@ const Home = () => {
             console.error('Error cargando pests.json:', error);
         }
     }
-      else if (view === 'climate') {
-        const climateData: ClimateData[] = [
-          {
-            lat: -12.0464,
-            lon: -77.0428,
-            zone: 'Lima',
-            description: 'Clima cálido y húmedo',
-            recommendation: 'Plantar maíz y frutas tropicales',
-          },
-          {
-            lat: -13.1631,
-            lon: -72.545,
-            zone: 'Cusco',
-            description: 'Clima templado y seco',
-            recommendation: 'Cultivar quinua y papa',
-          },
-        ];
-        setData(climateData);
-      }
-      else if (view === 'insights') {
-        setData([
-          {
-            country: 'Perú',
-            headline: 'Aumento en la exportación de palta hacia Europa',
-          },
-          {
-            country: 'Perú',
-            headline: 'Sequia en zonas del norte afecta la producción de arroz',
-          },
-        ]);
-      }
     };
     fetchData();
   }, [view]);
@@ -96,9 +53,7 @@ const Home = () => {
   return (
     <div>
       <ViewSelector setView={setView} />
-      {view === 'climate' && <ClimateMap data={data} />}
       {view === 'pests' && <PestsMap data={data} />}
-      {view === 'insights' && <InsightsMap data={data} />}
     </div>
   );
 };
