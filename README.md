@@ -1,9 +1,15 @@
 
 # KURAY: Monitoreo y Recomendaciones para Plagas Agrícolas
 
-**KURAY** es una aplicación web interactiva que permite visualizar plagas agrícolas en un mapa interactivo, realizar búsquedas y filtros avanzados, y obtener recomendaciones específicas sobre cómo manejar las plagas reportadas. Este proyecto está diseñado para apoyar a agricultores, investigadores y profesionales del sector agrícola en la toma de decisiones informadas.
+**KURAY** es una aplicación web interactiva que  
+- Permite visualizar el clima en tu región
+- Implementa el crowdsourcing de plagas agrícola
+- Proporciona insights de exportación global
 
 ---
+
+## Estructura del proyecto
+
 
 ## **Objetivo del Proyecto**
 El objetivo principal de KURAY es proporcionar una plataforma visual y accesible para:
@@ -111,7 +117,7 @@ Ejemplo de solicitud enviada a OpenAI:
 ---
 
 ## **Metas del Proyecto**
-1. **Optimizar la toma de decisiones agrícolas:** Facilitar el acceso a información relevante sobre plagas y recomendaciones de manejo.
+1. **Optimizar la toma de decisiones agrícolas:** Facilitar el acceso a información relevante sobre plagas y recomendaciones de planificación.
 2. **Escalabilidad:** Adaptar la aplicación para incluir más funcionalidades, como reportes en tiempo real o análisis históricos.
 3. **Contribuir al sector agrícola:** Ofrecer una herramienta accesible y efectiva para mejorar la productividad y reducir pérdidas en cultivos.
 
@@ -122,10 +128,6 @@ Ejemplo de solicitud enviada a OpenAI:
 - Visualización histórica de plagas para análisis de patrones.
 - Exportación de datos a CSV o integración con sistemas ERP agrícolas.
 
----
-
-## **Colaboradores**
-Este proyecto fue desarrollado en colaboración con expertos en tecnología e inteligencia artificial, con un enfoque en innovación agrícola.
 
 ---
 
