@@ -7,11 +7,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(405).json({ error: 'Método no permitido' });
     }
 
-    const { pest, region, date } = req.body;
+    const { title, category, publish_date, insight } = req.body;
 
-    if (!pest || !region || !date) {
-        return res.status(400).json({ error: 'La plaga, la región y la fecha son requeridas.' });
+    if (!title || !publish_date) {
+        return res.status(400).json({ error: 'El título y la fecha de publicación son requeridos.' });
     }
+
+    // Si no hay categoría, asignar un valor predeterminado
+    const safeCategory = category || "Noticia no clasificada";
 
     try {
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -25,16 +28,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 messages: [
                     {
                         role: 'system',
-                        content: 'Eres un experto en agricultura y control de plagas.',
+                        content: 'Eres un analista experto en noticias agrícolas, económicas y políticas.',
                     },
                     {
                         role: 'user',
-                        content: `Proporciona recomendaciones detalladas y prácticas para combatir la plaga denominada '${pest}', reportada en la región '${region}' el día '${date}'. Toma en cuenta las condiciones climáticas y agrícolas típicas de esta región, como temperatura, humedad, temporadas de cultivo y los tipos de cultivos predominantes. Proporciona sugerencias que incluyan:
-                                Métodos biológicos o naturales si son efectivos.
-                                Uso de pesticidas o tratamientos químicos específicos, indicando los productos y dosis recomendadas.
-                                Prácticas culturales o preventivas para controlar la propagación.
-                                Consideraciones especiales para minimizar el impacto en el medio ambiente y los cultivos.
-                                Responde en un lenguaje sencillo y directo, adecuado para agricultores con experiencia práctica. TODO EN 200 PALABRAS COMO MAXIMO Y 1250 LETRAS COMO MAXIMO`,
+                        content: `Analiza la siguiente noticia y proporciona un resumen con un insight:
+                                Título: '${title}'
+                                Categoría: '${safeCategory}'
+                                Fecha: '${publish_date}'
+                                Insight previo: '${insight || "No disponible"}'
+                                Responde en 200 palabras como máximo.`,
                     },
                 ],
                 max_tokens: 500,

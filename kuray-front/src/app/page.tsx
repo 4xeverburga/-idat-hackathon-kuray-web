@@ -33,7 +33,7 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const endpoint = `https://wapp5fewnmgakrn5yzo2u5nsdm0auxzy.lambda-url.us-east-1.on.aws/`;
+        const endpoint = `https://3y5g7n7qstgbgs5k53elapbjce0kvera.lambda-url.us-east-1.on.aws/`;
         const res = await axios.get(endpoint);
         if (res.data && Array.isArray(res.data.climate)) {
           const climateData = res.data.climate.map((climate: any) => ({

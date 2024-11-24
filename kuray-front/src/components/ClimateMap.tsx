@@ -4,8 +4,8 @@ import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
 // Función para generar colores dinámicos
-const generateColor = (pestType: string) => {
-    const hash = pestType.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+const generateColor = (cityType: string) => {
+    const hash = cityType.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     const hue = hash % 360; // Generar un color único basado en el nombre
     return `hsl(${hue}, 70%, 50%)`; // Colores vibrantes
 };
@@ -19,14 +19,14 @@ const createCustomIcon = (color: string) =>
     });
 
 const ClimateMap = ({ data, setRecommendations }: { data: any[]; setRecommendations: (recommendations: string) => void }) => {
-    const fetchRecommendations = async (pest: string, region: string, date: string) => {
+    const fetchRecommendations = async (city: string, maxt: string, mint: string,precipitation: string) => {
             try {
             const res = await fetch('/api/recommendations', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ pest, region, date }),
+                body: JSON.stringify({ city, maxt, mint, precipitation }),
             });
             const responseData = await res.json();
             setRecommendations(responseData.recommendations || 'No se encontraron recomendaciones.');
@@ -43,13 +43,13 @@ const ClimateMap = ({ data, setRecommendations }: { data: any[]; setRecommendati
                     <Marker
                     key={index}
                     position={[point.lat, point.lon]}
-                    icon={createCustomIcon(generateColor(point.pest))}
+                    icon={createCustomIcon(generateColor(point.city))}
                     >
                     <Popup>
                         <strong>{point.zone}</strong>
                         <p>{point.description}</p>
                         <button
-                            onClick={() => fetchRecommendations(point.pest, point.region, point.date)}
+                            onClick={() => fetchRecommendations(point.city, point.maxt, point.mint, point.precipitation)}
                             style={{
                                 padding: '5px 10px',
                                 backgroundColor: '#007BFF',
@@ -59,7 +59,7 @@ const ClimateMap = ({ data, setRecommendations }: { data: any[]; setRecommendati
                                 cursor: 'pointer',
                             }}
                             >
-                            ¿Qué hacer?
+                            ¿Qué se recomienda?
                         </button>
                     </Popup>
                 </Marker>
