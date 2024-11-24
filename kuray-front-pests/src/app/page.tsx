@@ -82,61 +82,100 @@ const Home = () => {
   }, [regionFilter, dateFilter, searchFilter, data]);
 
   return (
-    <div style={{ display: 'flex', height: '100vh', padding: '20px', backgroundColor: '#f9fafc',justifyContent: 'center' }}>
-      {/* Contenedor del mapa */}
-      <div style={{ flex: 3, paddingRight: '20px' }}>
-        <h1>Mapa de Plagas</h1>
-        <div className="filters">
-          <input
-            type="text"
-            placeholder="Buscar por región"
-            value={regionFilter}
-            onChange={(e) => setRegionFilter(e.target.value)}
-          />
-          <input
-            type="date"
-            placeholder="Desde"
-            value={dateFilter.from}
-            onChange={(e) => setDateFilter((prev) => ({ ...prev, from: e.target.value }))}
-          />
-          <input
-            type="date"
-            placeholder="Hasta"
-            value={dateFilter.to}
-            onChange={(e) => setDateFilter((prev) => ({ ...prev, to: e.target.value }))}
-          />
-          <input
-            type="text"
-            placeholder="Buscar plaga"
-            value={searchFilter}
-            onChange={(e) => setSearchFilter(e.target.value)}
-          />
-        </div>
-        {error ? (
-          <p style={{ color: 'red' }}>{error}</p>
-        ) : (
-          view === 'pests' && <PestsMap data={filteredData} setRecommendations={setRecommendations} />
-        )}
-      </div>
-
-      {/* Contenedor para las recomendaciones */}
-      <div
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+      {/* Header */}
+      <header
         style={{
-          flex: 1,
-          backgroundColor: '#fff',
-          borderRadius: '8px',
-          padding: '20px',
-          boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-          height: 'fit-max',
+          backgroundColor: '#4CAF50',
+          color: '#fff',
+          padding: '10px 20px',
+          textAlign: 'center',
+          fontSize: '20px',
+          fontWeight: 'bold',
         }}
       >
-        <h2>Recomendaciones</h2>
-        {recommendations ? (
-          <p style={{ whiteSpace: 'pre-wrap' }}>{recommendations}</p>
-        ) : (
-          <p style={{ color: '#888' }}>Selecciona una plaga para obtener recomendaciones.</p>
-        )}
+        <h1>Mapa de Plagas - Gestión Agrícola</h1>
+      </header>
+
+      {/* Contenido principal */}
+      <div style={{ display: 'flex', flex: 1, padding: '20px', backgroundColor: '#f9fafc' }}>
+        {/* Contenedor del mapa */}
+        <div style={{ flex: 3, paddingRight: '20px', display: 'flex', flexDirection: 'column' }}>
+          <h2>Mapa de Plagas</h2>
+          <div className="filters">
+            <input
+              type="text"
+              placeholder="Buscar por región"
+              value={regionFilter}
+              onChange={(e) => setRegionFilter(e.target.value)}
+            />
+            <input
+              type="date"
+              placeholder="Desde"
+              value={dateFilter.from}
+              onChange={(e) => setDateFilter((prev) => ({ ...prev, from: e.target.value }))}
+            />
+            <input
+              type="date"
+              placeholder="Hasta"
+              value={dateFilter.to}
+              onChange={(e) => setDateFilter((prev) => ({ ...prev, to: e.target.value }))}
+            />
+            <input
+              type="text"
+              placeholder="Buscar plaga"
+              value={searchFilter}
+              onChange={(e) => setSearchFilter(e.target.value)}
+            />
+          </div>
+          {error ? (
+            <p style={{ color: 'red' }}>{error}</p>
+          ) : (
+            view === 'pests' && <PestsMap data={filteredData} setRecommendations={setRecommendations} />
+          )}
+        </div>
+
+        {/* Contenedor de recomendaciones */}
+        <div
+          style={{
+            flex: 1,
+            backgroundColor: '#fff',
+            borderRadius: '8px',
+            padding: '20px',
+            boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+            height: '100%', // Mantener altura completa
+            display: 'flex', // Activar flexbox
+            flexDirection: 'column', // Mantener diseño de columna
+            justifyContent: 'center', // Centrar verticalmente
+            alignItems: 'center', // Centrar horizontalmente
+            textAlign: 'center', // Opcional: centrar el texto
+          }}
+        >
+          <h2>Recomendaciones</h2>
+          {recommendations ? (
+            <p style={{ whiteSpace: 'pre-wrap', color: '#555', lineHeight: '1.5' }}>
+              {recommendations}
+            </p>
+          ) : (
+            <p style={{ color: '#888', fontStyle: 'italic' }}>
+              Selecciona una plaga para obtener recomendaciones específicas.
+            </p>
+          )}
+        </div>
       </div>
+
+      {/* Footer */}
+      <footer
+        style={{
+          backgroundColor: '#4CAF50',
+          color: '#fff',
+          padding: '10px 20px',
+          textAlign: 'center',
+          fontSize: '14px',
+        }}
+      >
+        <p>© 2024 Gestión Agrícola. Todos los derechos reservados.</p>
+      </footer>
     </div>
   );
 };

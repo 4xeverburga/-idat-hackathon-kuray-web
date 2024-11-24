@@ -1,49 +1,66 @@
 "use client";
 import L from 'leaflet';
+import React from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 
-// Configuración manual del icono
-const defaultIcon = L.icon({
-    iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-    iconSize: [25, 41], // Tamaño del icono
-    iconAnchor: [12, 41], // Punto de anclaje
-    popupAnchor: [1, -34], // Posición del popup
-    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
-    shadowSize: [41, 41], // Tamaño de la sombra
-});
-
-L.Marker.prototype.options.icon = defaultIcon;
-
-import React, { useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import { LatLngBounds } from 'leaflet';
-
-const SetView = ({ center, zoom }: { center: [number, number]; zoom: number }) => {
-    const map = useMap();
-    useEffect(() => {
-        map.setView(center, zoom);
-    }, [map, center, zoom]);
-    return null;
+// Función para generar colores dinámicos
+const generateColor = (pestType: string) => {
+    const hash = pestType.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    const hue = hash % 360; // Generar un color único basado en el nombre
+    return `hsl(${hue}, 70%, 50%)`; // Colores vibrantes
 };
 
-const ClimateMap = ({ data }: { data: any[] }) => {
+// Crear íconos personalizados según el color generado
+const createCustomIcon = (color: string) =>
+    L.divIcon({
+        className: 'custom-icon',
+        html: `<div style="background-color: ${color}; width: 20px; height: 20px; border-radius: 50%;"></div>`,
+        iconSize: [20, 20],
+    });
+
+const ClimateMap = ({ data, setRecommendations }: { data: any[]; setRecommendations: (recommendations: string) => void }) => {
+    const fetchRecommendations = async (pest: string, region: string, date: string) => {
+            try {
+            const res = await fetch('/api/recommendations', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ pest, region, date }),
+            });
+            const responseData = await res.json();
+            setRecommendations(responseData.recommendations || 'No se encontraron recomendaciones.');
+            } catch (error) {
+            console.error('Error obteniendo recomendaciones:', error);
+            setRecommendations('No se pudieron obtener recomendaciones.');
+            }
+        };
     return (
-        <MapContainer
-            style={{ height: '500px', width: '100%' }} // Dimensiones del mapa
-            className="map-climate"
-        >
-            {/* Configuración de la vista inicial */}
-            <SetView center={[0, 0]} zoom={2} />
-            
+        <MapContainer style={{ height: '70vh', width: '100%' }} center={[-11.5, -75]} zoom={6}>
             {/* Capa base del mapa */}
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-
-            {/* Iterar sobre los datos para renderizar marcadores */}
-            {data.map((point, index) => (
-                <Marker key={index} position={[point.lat, point.lon]}>
+                {data.map((point, index) => (
+                    <Marker
+                    key={index}
+                    position={[point.lat, point.lon]}
+                    icon={createCustomIcon(generateColor(point.pest))}
+                    >
                     <Popup>
                         <strong>{point.zone}</strong>
                         <p>{point.description}</p>
-                        <p>Recomendación: {point.recommendation}</p>
+                        <button
+                            onClick={() => fetchRecommendations(point.pest, point.region, point.date)}
+                            style={{
+                                padding: '5px 10px',
+                                backgroundColor: '#007BFF',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '5px',
+                                cursor: 'pointer',
+                            }}
+                            >
+                            ¿Qué hacer?
+                        </button>
                     </Popup>
                 </Marker>
             ))}

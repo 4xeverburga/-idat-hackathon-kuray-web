@@ -12,7 +12,7 @@ body {
 
 /* Contenedor principal */
 .container {
-    width: 90%;
+    width: 100%;
     max-width: 1200px;
     text-align: center;
     padding: 20px;
@@ -26,7 +26,6 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
     padding: 10px 20px;
     background: #f1f1f1; /* Fondo claro */
     border-radius: 8px;
@@ -72,7 +71,7 @@ button:hover {
 
 /* Título */
 h1 {
-    font-size: 24px;
+    font-size: 25px;
     color: #222;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
