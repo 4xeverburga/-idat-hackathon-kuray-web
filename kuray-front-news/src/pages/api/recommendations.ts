@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(405).json({ error: 'Método no permitido' });
     }
 
-    const { title, category, publish_date, insight } = req.body;
+    const { title, category, publish_date, insight,text } = req.body;
 
     if (!title || !publish_date) {
         return res.status(400).json({ error: 'El título y la fecha de publicación son requeridos.' });
@@ -32,11 +32,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     },
                     {
                         role: 'user',
-                        content: `Analiza la siguiente noticia y proporciona un resumen con un insight:
+                        content: `Analiza la siguiente noticia y como agricultor que tanto me va a afectar o que medidas debo tomar:
                                 Título: '${title}'
                                 Categoría: '${safeCategory}'
                                 Fecha: '${publish_date}'
                                 Insight previo: '${insight || "No disponible"}'
+                                Tomar en cuenta esta descripcion: '${text}'
                                 Responde en 200 palabras como máximo.`,
                     },
                 ],

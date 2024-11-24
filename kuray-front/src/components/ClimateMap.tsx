@@ -19,14 +19,14 @@ const createCustomIcon = (color: string) =>
     });
 
 const ClimateMap = ({ data, setRecommendations }: { data: any[]; setRecommendations: (recommendations: string) => void }) => {
-    const fetchRecommendations = async (city: string, maxt: string, mint: string,precipitation: string) => {
+    const fetchRecommendations = async (city: string, maxt: string, mint: string,precipitation: string,description:string) => {
             try {
             const res = await fetch('/api/recommendations', {
                 method: 'POST',
                 headers: {
                 'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ city, maxt, mint, precipitation }),
+                body: JSON.stringify({ city, maxt, mint, precipitation, description }),
             });
             const responseData = await res.json();
             setRecommendations(responseData.recommendations || 'No se encontraron recomendaciones.');
@@ -49,7 +49,7 @@ const ClimateMap = ({ data, setRecommendations }: { data: any[]; setRecommendati
                         <strong>{point.zone}</strong>
                         <p>{point.description}</p>
                         <button
-                            onClick={() => fetchRecommendations(point.city, point.maxt, point.mint, point.precipitation)}
+                            onClick={() => fetchRecommendations(point.city, point.maxt, point.mint, point.precipitation, point.description)}
                             style={{
                                 padding: '5px 10px',
                                 backgroundColor: '#007BFF',

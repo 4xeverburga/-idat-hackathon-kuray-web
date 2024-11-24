@@ -21,14 +21,14 @@ const createCustomIcon = (color: string) =>
     });
 
 const NewsMap = ({ data, setRecommendations }: { data: any[]; setRecommendations: (recommendations: string) => void }) => {
-    const fetchRecommendations = async (title: string, category: string, publish_date: string,insight: string) => {
+    const fetchRecommendations = async (title: string, category: string, publish_date: string,insight: string,text: string) => {
         try {
         const res = await fetch('/api/recommendations', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ title, category, publish_date, insight }),
+            body: JSON.stringify({ title, category, publish_date, insight,text }),
         });
         const responseData = await res.json();
         setRecommendations(responseData.recommendations || 'No se encontraron recomendaciones.');
@@ -50,7 +50,7 @@ const NewsMap = ({ data, setRecommendations }: { data: any[]; setRecommendations
                         <strong>{news.title}</strong>
                         <p>Categoría: {news.category}</p>
                         <button
-                            onClick={() => fetchRecommendations(news.title, news.category, news.publish_date, news.insight)}
+                            onClick={() => fetchRecommendations(news.title, news.category, news.publish_date, news.insigh,news.text)}
                             style={{
                                 padding: '5px 10px',
                                 backgroundColor: '#007BFF',

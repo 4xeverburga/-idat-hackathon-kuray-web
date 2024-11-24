@@ -148,12 +148,19 @@ const Home = () => {
                 <div
                     style={{
                         flex: 1,
-                        backgroundColor: "#fff",
-                        borderRadius: "8px",
-                        padding: "20px",
-                        boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                        backgroundColor: '#fff',
+                        borderRadius: '8px',
+                        padding: '20px',
+                        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        textAlign: 'center',
                     }}
-                >
+                    >
+                    <h2>Recomendaciones</h2>
                     {recommendations ? (
                         <p style={{ whiteSpace: 'pre-wrap', color: '#555', lineHeight: '1.5' }}>
                         {recommendations}

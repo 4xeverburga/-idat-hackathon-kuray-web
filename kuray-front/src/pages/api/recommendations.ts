@@ -7,7 +7,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(405).json({ error: 'Método no permitido' });
     }
 
-    const { city, maxt, mint, precipitation } = req.body;
+    const { city, maxt, mint, precipitation, description } = req.body;
 
     if (!city || !maxt || !mint || !precipitation) {
         return res.status(400).json({ error: 'La ciudad, temperatura máxima, temperatura mínima y precipitación son requeridas.' });
@@ -35,6 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                 - Precipitación: '${precipitation}' mm
 
                                 Considera lo siguiente:
+                                - descripción: '${description}'
                                 - Sugerencias para optimizar el manejo de cultivos en estas condiciones.
                                 - Cultivos más adecuados para este clima.
                                 - Métodos para mitigar los riesgos climáticos, como heladas, sequías o exceso de lluvia.
