@@ -1,5 +1,5 @@
 {
-  "name": "kuray-front-insight",
+  "name": "kuray-front-pests",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -12,7 +12,7 @@
     "axios": "^1.7.7",
     "chart.js": "^4.4.6",
     "kuray-front": "file:",
-    "kuray-front-insight": "file:",
+    "kuray-front-pests": "file:",
     "leaflet": "^1.9.4",
     "next": "15.0.3",
     "pg": "^8.13.1",
