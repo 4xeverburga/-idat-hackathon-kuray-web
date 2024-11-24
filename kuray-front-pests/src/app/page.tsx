@@ -1,8 +1,7 @@
 "use client";
-
 import React, { useState, useEffect } from 'react';
-import ViewSelector from '../components/ViewSelector'; // Importación por defecto
-import PestsMap from '../components/PestsMap'; // Importación por defecto
+import ViewSelector from '../components/ViewSelector';
+import PestsMap from '../components/PestsMap';
 import axios from 'axios';
 
 type PestsData = {
@@ -11,33 +10,37 @@ type PestsData = {
   pest: string;
   description: string;
   date: string;
-  region:string;
+  region: string;
 };
 
 const Home = () => {
   const [view, setView] = useState('pests');
   const [data, setData] = useState<PestsData[]>([]);
+  const [recommendations, setRecommendations] = useState<string | null>(null); // Estado para recomendaciones
+  const [filteredData, setFilteredData] = useState<PestsData[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  // Filtros
+  const [regionFilter, setRegionFilter] = useState('');
+  const [dateFilter, setDateFilter] = useState({ from: '', to: '' });
+  const [searchFilter, setSearchFilter] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const endpoint = `https://wapp5fewnmgakrn5yzo2u5nsdm0auxzy.lambda-url.us-east-1.on.aws/`;
         const res = await axios.get(endpoint);
-        console.log('Respuesta de la API:', res);
-        // Validar la estructura de la respuesta
         if (res.data && Array.isArray(res.data.pests)) {
-          const pestsData = res.data.pests
-            .filter((pest: any) => pest.lat !== undefined && pest.lon !== undefined) // Filtrar datos inválidos
-            .map((pest: any) => ({
-              lat: pest.lat,
-              lon: pest.lon,
-              pest: pest.pest,
-              description: pest.description,
-              date: pest.date,
-              region: pest.region
-            }));
-          setData(pestsData); // Guardar los datos procesados
+          const pestsData = res.data.pests.map((pest: any) => ({
+            lat: pest.lat,
+            lon: pest.lon,
+            pest: pest.pest,
+            description: pest.description,
+            date: pest.date,
+            region: pest.region,
+          }));
+          setData(pestsData);
+          setFilteredData(pestsData);
         } else {
           throw new Error('La respuesta de la API no tiene la estructura esperada.');
         }
@@ -50,14 +53,90 @@ const Home = () => {
     fetchData();
   }, []);
 
+  // Aplicar filtros
+  useEffect(() => {
+    let filtered = [...data];
+
+    if (regionFilter) {
+      filtered = filtered.filter((pest) =>
+        pest.region.toLowerCase().includes(regionFilter.toLowerCase())
+      );
+    }
+
+    if (dateFilter.from && dateFilter.to) {
+      filtered = filtered.filter((pest) => {
+        const pestDate = new Date(pest.date).getTime();
+        const fromDate = new Date(dateFilter.from).getTime();
+        const toDate = new Date(dateFilter.to).getTime();
+        return pestDate >= fromDate && pestDate <= toDate;
+      });
+    }
+
+    if (searchFilter) {
+      filtered = filtered.filter((pest) =>
+        pest.pest.toLowerCase().includes(searchFilter.toLowerCase())
+      );
+    }
+
+    setFilteredData(filtered);
+  }, [regionFilter, dateFilter, searchFilter, data]);
+
   return (
-    <div>
-      <ViewSelector setView={setView} />
-      {error ? (
-        <p style={{ color: 'red' }}>{error}</p>
-      ) : (
-        view === 'pests' && <PestsMap data={data} />
-      )}
+    <div style={{ display: 'flex', height: '100vh', padding: '20px', backgroundColor: '#f9fafc',justifyContent: 'center' }}>
+      {/* Contenedor del mapa */}
+      <div style={{ flex: 3, paddingRight: '20px' }}>
+        <h1>Mapa de Plagas</h1>
+        <div className="filters">
+          <input
+            type="text"
+            placeholder="Buscar por región"
+            value={regionFilter}
+            onChange={(e) => setRegionFilter(e.target.value)}
+          />
+          <input
+            type="date"
+            placeholder="Desde"
+            value={dateFilter.from}
+            onChange={(e) => setDateFilter((prev) => ({ ...prev, from: e.target.value }))}
+          />
+          <input
+            type="date"
+            placeholder="Hasta"
+            value={dateFilter.to}
+            onChange={(e) => setDateFilter((prev) => ({ ...prev, to: e.target.value }))}
+          />
+          <input
+            type="text"
+            placeholder="Buscar plaga"
+            value={searchFilter}
+            onChange={(e) => setSearchFilter(e.target.value)}
+          />
+        </div>
+        {error ? (
+          <p style={{ color: 'red' }}>{error}</p>
+        ) : (
+          view === 'pests' && <PestsMap data={filteredData} setRecommendations={setRecommendations} />
+        )}
+      </div>
+
+      {/* Contenedor para las recomendaciones */}
+      <div
+        style={{
+          flex: 1,
+          backgroundColor: '#fff',
+          borderRadius: '8px',
+          padding: '20px',
+          boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
+          height: 'fit-max',
+        }}
+      >
+        <h2>Recomendaciones</h2>
+        {recommendations ? (
+          <p style={{ whiteSpace: 'pre-wrap' }}>{recommendations}</p>
+        ) : (
+          <p style={{ color: '#888' }}>Selecciona una plaga para obtener recomendaciones.</p>
+        )}
+      </div>
     </div>
   );
 };
