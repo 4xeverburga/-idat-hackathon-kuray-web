@@ -1,6 +1,5 @@
-"use client";
+'use client'
 import React, { useState, useEffect } from 'react';
-import ViewSelector from '../components/ViewSelector';
 import PestsMap from '../components/PestsMap';
 import axios from 'axios';
 
