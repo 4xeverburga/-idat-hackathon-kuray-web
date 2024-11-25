@@ -1,0 +1,12 @@
+version: 2
+authtoken: 2n2bZ1zaCfflDNnhRLZv8C6lv5s_6MZkqccNom2ohMyQabbqX
+tunnels:
+  http_3000:
+    proto: http
+    addr: 3000
+  http_3001:
+    proto: http
+    addr: 3001
+  http_3002:
+    proto: http
+    addr: 3002

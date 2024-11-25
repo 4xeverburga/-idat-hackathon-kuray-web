@@ -28,11 +28,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 messages: [
                     {
                         role: 'system',
-                        content: 'Eres un analista experto en noticias agrícolas, económicas y políticas.',
+                        content: 'Eres un analista experto en noticias agrícolas, económicas y políticas para una empresa agrícola peruana.',
                     },
                     {
                         role: 'user',
-                        content: `Analiza la siguiente noticia y como agricultor que tanto me va a afectar o que medidas debo tomar:
+                        content: `Analiza la siguiente noticia y como analista de planificación qué medidas debo tomar para aprovechar la oportunidad:
                                 Título: '${title}'
                                 Categoría: '${safeCategory}'
                                 Fecha: '${publish_date}'

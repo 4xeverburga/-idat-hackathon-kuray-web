@@ -48,7 +48,9 @@ const NewsMap = ({ data, setRecommendations }: { data: any[]; setRecommendations
                 >
                     <Popup>
                         <strong>{news.title}</strong>
-                        <p>Categoría: {news.category}</p>
+                        <p>¿Insight? {news.insight}</p>
+                        <a href={news.url} target="_blank" rel="noopener noreferrer">{news.url}</a>
+                        <p>Categoría: {news.category ? news.category : 'No clasificado'}</p>
                         <button
                             onClick={() => fetchRecommendations(news.title, news.category, news.publish_date, news.insigh,news.text)}
                             style={{
